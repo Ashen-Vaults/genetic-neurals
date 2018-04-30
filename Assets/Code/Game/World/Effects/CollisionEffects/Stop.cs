@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace effects
+namespace Effects
 {
 
-    public class Stop : IEffectable
+    public class Stop : CollisionEffect
     {
 
-		//TODO: actually effect the gameobject speed
-		//color is for testing
-		public void Run(GameObject g)
-		{
+        public override void Run(GameObject g)
+        {
             g.GetComponent<Renderer>().material.color = Color.red;
         }
 
