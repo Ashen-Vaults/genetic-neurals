@@ -22,6 +22,16 @@ public class Parallax : MonoBehaviour
             this._renderers = this.transform.GetComponentsInChildren<SpriteRenderer>();
         }
 
+        public float GetWidth()
+        {
+            float width = 0f;
+            for (int i = 0; i < this._renderers.Length; i++)
+            {
+                width += this._renderers[i].bounds.size.x;
+            }
+            return width;
+        }
+
 		public void Activate()
 		{
             this.active = true;
@@ -162,7 +172,7 @@ public class Parallax : MonoBehaviour
 
 	void CheckDisposables(PoolObject poolObj)
 	{
-		if(poolObj.transform.position.x < (-defaultSpawnPosition.x * Camera.main.aspect / targetAspect))
+		if(poolObj.transform.position.x < (-defaultSpawnPosition.x - poolObj.GetWidth() * Camera.main.aspect / targetAspect))
 		{
             poolObj.Dispose();
         }	
