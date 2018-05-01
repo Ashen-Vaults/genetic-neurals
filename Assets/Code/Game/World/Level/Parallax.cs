@@ -9,14 +9,14 @@ public class Parallax : MonoBehaviour
 	#region PoolObject
 
 	[Serializable]
-	struct PoolObject
+	class PoolObject
 	{
         public Transform transform;
         public bool active;
 
         Renderer[] _renderers;
 
-        public void Init(Transform transform)
+        public PoolObject(Transform transform)
 		{
             this.transform = transform;
             this._renderers = this.transform.GetComponentsInChildren<SpriteRenderer>();
@@ -29,16 +29,18 @@ public class Parallax : MonoBehaviour
             {
                 for (int i = 0; i < this._renderers.Length; i++)
 				{
-                    this._renderers[i].enabled = true;
+                //  this._renderers[i].enabled = true;
 				}
             }
         }
 
 		public void Dispose()
 		{
+            this.active = false;
+            this.transform.position = Vector3.one * 1000;
             for (int i = 0; i < this._renderers.Length; i++)
             {
-                this._renderers[i].enabled = false;
+             //   this._renderers[i].enabled = false;
             }
 			
         }
@@ -102,7 +104,7 @@ public class Parallax : MonoBehaviour
             Transform t = g.transform;
             t.SetParent(this.transform);
             t.position = Vector3.one * 1000;
-            poolObjects[i].Init(t);
+            poolObjects[i] = new PoolObject(t);
         }
 
         if(spawnOnStart)
@@ -131,7 +133,7 @@ public class Parallax : MonoBehaviour
         Transform t = GetPoolObject();
 		if(t == null) return;
         Vector3 position = Vector3.zero;
-        position.x = spawnPosition.x;
+        position.x = spawnPosition.x * Camera.main.aspect / targetAspect ;
         position.y = UnityEngine.Random.Range(ySpawnRange.min, ySpawnRange.max);
         t.position = position;
 
@@ -153,7 +155,7 @@ public class Parallax : MonoBehaviour
 	{
         for (int i = 0; i < poolObjects.Length; i++)
         {
-            transform.localPosition += -Vector3.right * scrollSpeed * Time.deltaTime;
+            poolObjects[i].transform.localPosition += -Vector3.right * scrollSpeed * Time.deltaTime;
             CheckDisposables(poolObjects[i]);
         };
     }
@@ -169,8 +171,13 @@ public class Parallax : MonoBehaviour
 	Transform GetPoolObject()
 	{
     	PoolObject poolObj = poolObjects.FirstOrDefault(p => !p.active);
-        poolObj.Activate();
-        return poolObj.transform;
+
+        if(poolObj != null)
+        {
+            poolObj.Activate();
+            return poolObj.transform;
+        }
+        return null;
     }
 
 
