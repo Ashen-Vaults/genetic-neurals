@@ -21,6 +21,7 @@ namespace AshenCode.NeuralNetwork
             _layers = layers;
 
             //TODO: init somewhere else
+            _mutateDict.Clear();
             _mutateDict.Add((float x) => x <= 2, f => { return f *= -1f; });
             _mutateDict.Add((float x) => x <= 4, f => { return UnityEngine.Random.Range(-0.5f, 0.5f); });
             _mutateDict.Add((float x) => x <= 6, f => { return f *= UnityEngine.Random.Range(0f, 1f) + 1f; });
@@ -70,6 +71,29 @@ namespace AshenCode.NeuralNetwork
             return weights.ToArray();
         }
 
+        public NeuralNetwork(NeuralNetwork copy)
+        {
+            this._layers = new List<int>();
+            this._layers.AddRange(copy._layers);
+            this._neurons = CreateNeurons(this._layers);
+            this._weights = CreateWeights(this._layers);
+            CopyWeights(copy._weights);
+        }
+
+        private void CopyWeights(float[][][] copy)
+        {
+            for (int i = 0; i < _weights.Length; i++)
+            {
+                for (int j = 0; j < _weights[i].Length; j++)
+                {
+                    for (int k = 0; k < _weights[i][j].Length; k++)
+                    {
+                        _weights[i][j][k] = copy[i][j][k];
+                    }
+                }
+            }
+        }
+
         public float[] FeedForward(float[] inputs)
         {
             for (int i = 0; i < inputs.Length; i++)
@@ -107,7 +131,7 @@ namespace AshenCode.NeuralNetwork
 
                         float randomNumber = (float)_random.NextDouble() * 1000f;
 
-                        _mutateDict[_mutateDict.Keys.Where(m => m.Invoke(randomNumber)).First()].Invoke(weight);
+                        _weights[i][j][k] = _mutateDict[_mutateDict.Keys.Where(m => m.Invoke(randomNumber)).First()].Invoke(weight);
                     }
                 }   
             }
