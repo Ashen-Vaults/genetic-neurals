@@ -1,0 +1,21 @@
+
+
+
+Remove the tree's and spider and change to color coded objects.
+
+The players color won't matter, make it a grey orb or square
+
+The obstacles will be a reddish hue
+
+collectable will be green
+
+The player's perception will be that it can detect color within a range
+
+so as it starts playing the game, it will need to learn to 
+
+    * not fall down
+    * collect collectables (green)
+    * avoid obstacles (red)
+
+it wont know that obstacles (red) are bad, it will learn to avoid it through
+a genetic algorithm using neural networks. same for collectables.
