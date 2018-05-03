@@ -136,7 +136,14 @@ namespace AshenCode.NeuralNetwork
 
                         float randomNumber = (float)_random.NextDouble() * 1000f;
 
-                        _weights[i][j][k] = _mutateDict[_mutateDict.Keys.Where(m => m.Invoke(randomNumber)).First()].Invoke(weight);
+                        if(_mutateDict != null && _weights != null)
+                        {
+                            _weights[i][j][k]  =
+                             _mutateDict[_mutateDict
+                                .Keys
+                                .Where(m => m(randomNumber) != null)
+                                .FirstOrDefault()
+                            ](weight);     
                     }
                 }   
             }
