@@ -139,5 +139,10 @@ namespace AshenCode.NeuralNetwork
                 }   
             }
         }
+
+        public int CompareTo(NeuralNetwork other)
+        {
+            return _fitness.CompareTo(other._fitness);
+        }
     }
 }
