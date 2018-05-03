@@ -12,7 +12,7 @@ namespace AshenCode.NeuralNetwork
         float[][] _neurons;
         float[][][] _weights;
 
-        private Fitness _fitness;
+        public Fitness fitness;
 
         Random _random;
 
@@ -20,6 +20,7 @@ namespace AshenCode.NeuralNetwork
 
         public NeuralNetwork(List<int> layers)
         {
+            fitness = new Fitness();
             _random = new Random(System.DateTime.Today.Millisecond);
             _layers = layers;
 
@@ -39,7 +40,7 @@ namespace AshenCode.NeuralNetwork
         {
             List<float[]> neurons = new List<float[]>();
 
-            for (int i = 0; i < neurons.Count; i++)
+            for (int i = 0; i < layers.Count; i++)
             {
                 neurons.Add(new float[layers[i]]);
             }
@@ -51,20 +52,21 @@ namespace AshenCode.NeuralNetwork
         {
             List<float[][]> weights = new List<float[][]>();
 
-            for (int i = 0; i < layers.Count;i++)
+            for (int i = 1; i < layers.Count;i++)
             {
                 List<float[]> layerWeights = new List<float[]>();
 
                 int prevNeurons = layers[i - 1];
 
-                for (int j = 0; j < prevNeurons; j++)
+                for (int j = 0; j < _neurons[i].Length; j++)
                 {
                     float[] neuronWeights = new float[prevNeurons];
 
                     //Set random weights -1 -> 1
                     for (int k = 0; k < prevNeurons; k++)
                     {
-                        neuronWeights[k] = (float)_random.NextDouble() - 0.5f;
+                        neuronWeights[k] = UnityEngine.Random.Range(-0.5f, 0.5f);
+                        //(float)_random.NextDouble() - 0.5f;
                     }
 
                     layerWeights.Add(neuronWeights);
@@ -80,7 +82,7 @@ namespace AshenCode.NeuralNetwork
             this._layers.AddRange(copy._layers);
             this._neurons = CreateNeurons(this._layers);
             this._weights = CreateWeights(this._layers);
-            CopyWeights(copy._weights);
+            this.CopyWeights(copy._weights);
         }
 
         private void CopyWeights(float[][][] copy)
@@ -101,16 +103,16 @@ namespace AshenCode.NeuralNetwork
         {
             for (int i = 0; i < inputs.Length; i++)
             {
-                _neurons[0][1] = inputs[i];
+                _neurons[0][i] = inputs[i];
             }
             for (int i = 1; i < _layers.Count; i++)
             {
-                for (int j = 0; j < _neurons.Length; j++)
+                for (int j = 0; j < _neurons[i].Length; j++)
                 {
 
-                    float value = 0.25f;
+                    float value = 0f;
 
-                    for (int k = 1; k < _neurons[i-1].Length; k++)
+                    for (int k = 0; k < _neurons[i-1].Length; k++)
                     {
                         value += _weights[i - 1][j][k] * _neurons[i - 1][k];
                     }
@@ -142,7 +144,9 @@ namespace AshenCode.NeuralNetwork
 
         public int CompareTo(NeuralNetwork other)
         {
-            return _fitness.CompareTo(other._fitness);
+            if (fitness == null) return 1;
+            else if (other == null) return 1;
+            else return fitness.CompareTo(other.fitness);
         }
     }
 }
