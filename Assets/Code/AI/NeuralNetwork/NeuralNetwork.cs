@@ -1,21 +1,31 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace AshenCode.NeuralNetwork
 {
+
     public class NeuralNetwork
     {
         //Feed in layers
-
         List<int> _layers;
         float[][] _neurons;
         float[][][] _weights;
         Random _random;
-        
+
+        Dictionary<Predicate<float>, Func<float, float>> _mutateDict = new Dictionary<Predicate<float>, Func<float, float>>();
+
         public NeuralNetwork(List<int> layers)
         {
             _random = new Random(System.DateTime.Today.Millisecond);
             _layers = layers;
+
+            //TODO: init somewhere else
+            _mutateDict.Add((float x) => x <= 2, f => { return f *= -1f; });
+            _mutateDict.Add((float x) => x <= 4, f => { return UnityEngine.Random.Range(-0.5f, 0.5f); });
+            _mutateDict.Add((float x) => x <= 6, f => { return f *= UnityEngine.Random.Range(0f, 1f) + 1f; });
+            _mutateDict.Add((float x) => x <= 8, f => { return f *= UnityEngine.Random.Range(0f, 1f); });
+
             _neurons = CreateNeurons(_layers);
             _weights = CreateWeights(_layers);
             
@@ -60,7 +70,6 @@ namespace AshenCode.NeuralNetwork
             return weights.ToArray();
         }
 
-        ///Calcualtes 
         public float[] FeedForward(float[] inputs)
         {
             for (int i = 0; i < inputs.Length; i++)
@@ -86,11 +95,22 @@ namespace AshenCode.NeuralNetwork
             return _neurons[_neurons.Length-1];
         }
 
-        Dictionary<float, Func<float, float>> _mutateDict = new Dictionary<float, Func<float, float>>();
-
         public void Mutate()
         {
+            for (int i = 0; i < _weights.Length; i++)
+            {
+                for (int j = 0; j < _weights[i].Length; j++)
+                {
+                    for (int k = 0; k < _weights[i][j].Length; k++)
+                    {
+                        float weight = _weights[i][j][k];
 
+                        float randomNumber = (float)_random.NextDouble() * 1000f;
+
+                        _mutateDict[_mutateDict.Keys.Where(m => m.Invoke(randomNumber)).First()].Invoke(weight);
+                    }
+                }   
+            }
         }
     }
 }
