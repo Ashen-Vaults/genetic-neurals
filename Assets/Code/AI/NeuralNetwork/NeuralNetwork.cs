@@ -5,12 +5,15 @@ using System.Collections.Generic;
 namespace AshenCode.NeuralNetwork
 {
 
-    public class NeuralNetwork
+    public class NeuralNetwork : IComparable<NeuralNetwork>
     {
         //Feed in layers
         List<int> _layers;
         float[][] _neurons;
         float[][][] _weights;
+
+        private Fitness _fitness;
+
         Random _random;
 
         Dictionary<Predicate<float>, Func<float, float>> _mutateDict = new Dictionary<Predicate<float>, Func<float, float>>();
