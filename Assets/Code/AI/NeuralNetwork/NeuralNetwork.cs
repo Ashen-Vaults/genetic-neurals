@@ -16,20 +16,20 @@ namespace AshenCode.NeuralNetwork
 
         Random _random;
 
-        Dictionary<Predicate<float>, Func<float, float>> _mutateDict = new Dictionary<Predicate<float>, Func<float, float>>();
+        List<KeyValuePair<Predicate<float>, Func<float, float>>> _mutations = new List<KeyValuePair<Predicate<float>, Func<float, float>>>();
 
         public NeuralNetwork(List<int> layers)
         {
-            fitness = new Fitness();
+             fitness = new Fitness();
             _random = new Random(System.DateTime.Today.Millisecond);
             _layers = layers;
 
-            //TODO: init somewhere else
-            _mutateDict.Clear();
-            _mutateDict.Add((float x) => x <= 2, f => { return f *= -1f; });
-            _mutateDict.Add((float x) => x <= 4, f => { return UnityEngine.Random.Range(-0.5f, 0.5f); });
-            _mutateDict.Add((float x) => x <= 6, f => { return f *= UnityEngine.Random.Range(0f, 1f) + 1f; });
-            _mutateDict.Add((float x) => x <= 8, f => { return f *= UnityEngine.Random.Range(0f, 1f); });
+  
+            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 2, f => { return f *= -1f; }));
+            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 4, f => { return UnityEngine.Random.Range(-0.5f, 0.5f); }));
+            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 6, f => { return f *= UnityEngine.Random.Range(0f, 1f) + 1f; }));
+            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 8, f => { return f *= UnityEngine.Random.Range(0f, 1f);}));
+            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => true, f => { return 0; })); //catch 
 
             _neurons = CreateNeurons(_layers);
             _weights = CreateWeights(_layers);
@@ -136,14 +136,10 @@ namespace AshenCode.NeuralNetwork
 
                         float randomNumber = (float)_random.NextDouble() * 1000f;
 
-                        if(_mutateDict != null && _weights != null)
+                        if(_mutations != null && _mutations.Count > 0)
                         {
-                            _weights[i][j][k]  =
-                             _mutateDict[_mutateDict
-                                .Keys
-                                .Where(m => m(randomNumber) != null)
-                                .FirstOrDefault()
-                            ](weight);     
+                            _mutations.First(m => m.Key(randomNumber)).Key(weight);
+                        } 
                     }
                 }   
             }
@@ -156,4 +152,4 @@ namespace AshenCode.NeuralNetwork
             else return fitness.CompareTo(other.fitness);
         }
     }
-}
+} 
