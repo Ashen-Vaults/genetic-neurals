@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AshenCode.Utility
 {
+	[System.Serializable]
 	public struct Range
 	{
 		public float min;
