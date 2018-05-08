@@ -18,7 +18,7 @@ namespace AshenCode.FloopyBirb.Bird
 
         void OnDestroy()
         {
-            Unsubscribe();  
+            Death();
         }
 
         void Subscribe()
@@ -37,6 +37,11 @@ namespace AshenCode.FloopyBirb.Bird
             {
                 controller.Control(this.transform, onControl);
             }
+        }
+
+        void Death()
+        {
+            Unsubscribe(); 
         }
 
 
