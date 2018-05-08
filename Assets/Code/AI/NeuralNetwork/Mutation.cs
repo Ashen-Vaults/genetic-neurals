@@ -16,6 +16,8 @@ namespace AshenCode.NeuralNetwork
 
             /// <summary>
             /// The function that applys the mutation
+            /// First param is the number you want to mutate (ex. weight)
+            /// returns a mutated version of it
             /// </summary>
             public Func<float,float> mutator;
             public Mutation(Predicate<float> predicate, Func<float,float> mutator)
