@@ -10,12 +10,9 @@ namespace AshenCode.FloopyBirb.World
 
         public override void Run(GameObject g)
         {
-            Rigidbody2D rigidbody = g.GetComponent<Rigidbody2D>();
-            if(rigidbody != null)
-            {
-              //  rigidbody.velocity += new Vector2(-1, 5);
-            }
             g.GetComponent<Renderer>().material.color = Color.red;
+            //TEMP
+            g.GetComponent<Bird.Bird>().Death();
         }
 
     }

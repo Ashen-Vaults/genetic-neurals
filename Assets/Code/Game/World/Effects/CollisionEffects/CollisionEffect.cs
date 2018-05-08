@@ -32,7 +32,7 @@ namespace AshenCode.FloopyBirb.World
             if (other != null && other.gameObject != null)
             {
                 this.Run(other.gameObject);
-                this._col.isTrigger = true; //so player doesn't get caught
+              //  this._col.isTrigger = true; //so player doesn't get caught
             }
         }
     }

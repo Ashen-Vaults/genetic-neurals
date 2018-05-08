@@ -26,11 +26,6 @@ namespace AshenCode.FloopyBirb.Bird
             Subscribe();
         }
 
-        void OnDestroy()
-        {
-            Death();
-        }
-
         public void Init(IControllable controller)
         {
             this.controller = controller;
@@ -56,9 +51,17 @@ namespace AshenCode.FloopyBirb.Bird
             Fall();
         }
 
-        void Death()
+        public void Death()
         {
-            Unsubscribe(); 
+            Unsubscribe();
+            this.gameObject.SetActive(false);
+            Destroy(this); 
+        }
+
+
+        void OnCollisionEnter2D(Collision2D other)
+        {
+            Death();
         }
 
 
