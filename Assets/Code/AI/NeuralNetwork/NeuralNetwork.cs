@@ -11,29 +11,25 @@ namespace AshenCode.NeuralNetwork
         List<int> _layers;
         float[][] _neurons;
         float[][][] _weights;
-
         public Fitness fitness;
-
         Random _random;
-
-        List<KeyValuePair<Predicate<float>, Func<float, float>>> _mutations = new List<KeyValuePair<Predicate<float>, Func<float, float>>>();
+        private List<Mutation> _mutations;
 
         public NeuralNetwork(List<int> layers)
         {
-             fitness = new Fitness();
+            fitness = new Fitness();
+            _mutations = new List<Mutation>();
             _random = new Random(System.DateTime.Today.Millisecond);
             _layers = layers;
-
-  
-            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 2, f => { return f *= -1f; }));
-            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 4, f => { return UnityEngine.Random.Range(-0.5f, 0.5f); }));
-            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 6, f => { return f *= UnityEngine.Random.Range(0f, 1f) + 1f; }));
-            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => x <= 8, f => { return f *= UnityEngine.Random.Range(0f, 1f);}));
-            _mutations.Add(new KeyValuePair<Predicate<float>, Func<float, float>>((float x) => true, f => { return 0; })); //catch 
-
             _neurons = CreateNeurons(_layers);
-            _weights = CreateWeights(_layers);
-            
+            _weights = CreateWeights(_layers);   
+
+            //TODO: Store in json or external file
+            _mutations.Add(new Mutation( x => x <= 2, f => {return f *= -1f;} ));
+            _mutations.Add(new Mutation( x => x <= 4, f => {return UnityEngine.Random.Range(-0.5f, 0.5f);} ));
+            _mutations.Add(new Mutation( x => x <= 6, f => {return f *= UnityEngine.Random.Range(0f, 1f) + 1f;} ));
+            _mutations.Add(new Mutation( x => x <= 8, f => {return f *= UnityEngine.Random.Range(0f, 1f);} ));
+            _mutations.Add(new Mutation( x => true  , f => {return 0;} ));    
         }
 
         private float[][] CreateNeurons(List<int> layers)
@@ -138,13 +134,18 @@ namespace AshenCode.NeuralNetwork
 
                         if(_mutations != null && _mutations.Count > 0)
                         {
-                            _mutations.First(m => m.Key(randomNumber)).Key(weight);
+                            _mutations.First(m => m.predicate(randomNumber)).mutator(weight);
                         } 
                     }
                 }   
             }
         }
 
+        /// <summary>
+        /// Returns the
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public int CompareTo(NeuralNetwork other)
         {
             if (fitness == null) return 1;

@@ -15,11 +15,19 @@ namespace AshenCode.NeuralNetwork
             _value = value;
         }
 
+
+
         public void Modify(float value)
         {
             _value += value;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public int CompareTo(Fitness obj)
         {
             if (obj == null) return 1;
