@@ -14,6 +14,12 @@ namespace AshenCode.FloopyBirb.Bird
 
         public Action onControl;
 
+        [SerializeField]
+        private float _tiltSmooth = 5f;
+
+        [SerializeField]
+        private float _force;
+
         void Awake()
         {
             _rigidBody = this.GetComponent<Rigidbody2D>();
@@ -46,6 +52,8 @@ namespace AshenCode.FloopyBirb.Bird
             {
                 controller.Control(this.transform, onControl);
             }
+
+            Fall();
         }
 
         void Death()
@@ -57,7 +65,12 @@ namespace AshenCode.FloopyBirb.Bird
         public void Jump()
         {
             print(this+ " jump");
-            _rigidBody.AddForce(Vector2.up * 25, ForceMode2D.Force);
+            _rigidBody.AddForce(Vector2.up * _force, ForceMode2D.Force);
+        }
+
+        private void Fall()
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0,0,-90),_tiltSmooth * Time.deltaTime);
         }
 
     }
