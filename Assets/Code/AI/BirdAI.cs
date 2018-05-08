@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using AshenCode.NeuralNetwork;
 using AshenCode.FloopyBirb.World;
+using System;
 
 namespace AshenCode.FloopyBirb.Bird
 {
@@ -10,12 +11,23 @@ namespace AshenCode.FloopyBirb.Bird
     {
         NeuralNetwork.NeuralNetwork network;
 
-        public void Control(Transform transform)
+        List<Action> _actions;
+
+        public void Control(Transform transform, Action callback)
         {
-            this.Think(transform, FindClosestObstacle());
+            this.Think(transform, FindClosestObstacle(), callback);
         }
 
-        public void Think(Transform transform, Obstacle obstacle )
+
+        public void Subscribe(List<Action> actions)
+        {
+            if(actions != null)
+            {
+                _actions = actions;
+            }
+        }
+
+        public void Think(Transform transform, Obstacle obstacle, Action callback)
         {
             ///  y location of bird
             ///  x location the closest pipe
@@ -34,14 +46,17 @@ namespace AshenCode.FloopyBirb.Bird
 
             if(output[0] > 0.5f)
             {
-                //jump
+                //Spacebar pressed
+                if(callback != null)
+                {
+                    callback();
+                }
             }
         }
 
         public Obstacle FindClosestObstacle()
         {
             return null;
-        } 
-
+        }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AshenCode.FloopyBirb.Bird
@@ -7,12 +9,40 @@ namespace AshenCode.FloopyBirb.Bird
         
         private IControllable controller;
 
+        public Action onControl;
+
+        void Awake()
+        {
+            Subscribe();
+        }
+
+        void OnDestroy()
+        {
+            Unsubscribe();  
+        }
+
+        void Subscribe()
+        {
+            onControl += Jump;
+        }
+
+        void Unsubscribe()
+        {
+            onControl -= Jump;
+        }
+
         void Update()
         {
             if(controller != null)
             {
-                controller.Control(this.transform);
+                controller.Control(this.transform, onControl);
             }
+        }
+
+
+        public void Jump()
+        {
+
         }
 
     }
