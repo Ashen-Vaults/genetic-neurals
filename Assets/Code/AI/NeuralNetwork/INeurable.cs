@@ -1,4 +1,4 @@
-namespace NeuralNetwork
+namespace AshenCode.NeuralNetwork
 {
     ///
     /// A standard interface for neural networks
@@ -7,6 +7,11 @@ namespace NeuralNetwork
     ///
     public interface INeurable
     {
-         
+    
+        void Mutate();
+        
+        float[] FeedForward(float[] inputs);
+
+
     }
 }

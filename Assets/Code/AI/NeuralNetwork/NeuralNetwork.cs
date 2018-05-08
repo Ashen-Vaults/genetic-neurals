@@ -5,16 +5,29 @@ using System.Collections.Generic;
 namespace AshenCode.NeuralNetwork
 {
 
-    public class NeuralNetwork : IComparable<NeuralNetwork>
+    public class NeuralNetwork : IComparable<NeuralNetwork>, INeurable
     {
         //Feed in layers
         List<int> _layers;
         float[][] _neurons;
         float[][][] _weights;
-        public Fitness fitness;
         Random _random;
+        public Fitness fitness;
         private List<Mutation> _mutations;
 
+        /// <summary>
+        ///  y location of bird
+        ///  x location the closest pipe
+        ///  y location of the top pipe
+        ///  y location of bottom pipe
+        /// 
+        ///  4 inputs
+        /// 
+        ///  4 hidden nodes
+        ///  
+        ///  1 output (jump or not)
+        /// </summary>
+        /// <param name="layers"></param>
         public NeuralNetwork(List<int> layers)
         {
             fitness = new Fitness();
@@ -95,6 +108,11 @@ namespace AshenCode.NeuralNetwork
             }
         }
 
+        /// <summary>
+        ///  Guess -1 or 1 based on input values
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
         public float[] FeedForward(float[] inputs)
         {
             for (int i = 0; i < inputs.Length; i++)
@@ -120,6 +138,11 @@ namespace AshenCode.NeuralNetwork
             return _neurons[_neurons.Length-1];
         }
 
+        /// <summary>
+        /// Modifys the weight for a specific 
+        /// layer. There is a very small chance
+        /// (0.8%) that a mutation will occur
+        /// </summary>
         public void Mutate()
         {
             for (int i = 0; i < _weights.Length; i++)
