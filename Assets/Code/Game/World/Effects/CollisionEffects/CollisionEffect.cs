@@ -5,8 +5,16 @@ using UnityEngine;
 namespace AshenCode.FloopyBirb.World
 {
 
+    [RequireComponent(typeof(Collider2D))]
     public class CollisionEffect : MonoBehaviour, IEffectable
     {
+
+        protected Collider2D _col;
+
+        void Start()
+        {
+            this._col = this.GetComponent<Collider2D>();
+        }
         public virtual void Run(GameObject g){}
 
         /// <summary>
@@ -24,6 +32,7 @@ namespace AshenCode.FloopyBirb.World
             if (other != null && other.gameObject != null)
             {
                 this.Run(other.gameObject);
+                this._col.isTrigger = true; //so player doesn't get caught
             }
         }
     }

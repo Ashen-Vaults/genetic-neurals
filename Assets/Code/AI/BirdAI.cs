@@ -13,6 +13,23 @@ namespace AshenCode.FloopyBirb.Bird
 
         List<Action> _actions;
 
+        UnityEngine.Random rand;
+
+        public BirdAIController()
+        {
+
+            rand = new UnityEngine.Random();
+            List<int> inputs = new List<int>()
+            {
+                4, 4, 1
+               //transform.position.y,
+               // obstacle.transform.position.x,
+               // obstacle.top.position.y,
+               // obstacle.bottom.position.y
+            };
+            this.network = new NeuralNetwork.NeuralNetwork(inputs); 
+        }
+
         public void Control(Transform transform, Action callback)
         {
             this.Think(transform, FindClosestObstacle(), callback);
@@ -34,17 +51,35 @@ namespace AshenCode.FloopyBirb.Bird
             ///  y location of the top pipe
             ///  y location of bottom pipe
             // normalize data
+
+
+
+
             float[] inputs = new float[]
             {
-                transform.position.y,
-                obstacle.transform.position.x,
-                obstacle.top.position.y,
-                obstacle.bottom.position.y
+                UnityEngine.Random.Range(0f,1f),
+                UnityEngine.Random.Range(0f,1f),
+                UnityEngine.Random.Range(0f,1f),
+                UnityEngine.Random.Range(0f,1f)
+                //transform.position.y,
+                //obstacle.transform.position.x,
+                //obstacle.top.position.y,
+                //obstacle.bottom.position.y
             };
+
+            for(int i =0; i< inputs.Length; i++)
+            {
+                Debug.Log(inputs[i]);
+            }
+
+         //   Debug.Log(transform.position.y + "\n" 
+         //    +  obstacle.transform.position.x + " " + obstacle.top.position.y + " "+ obstacle.bottom.position.y );
 
             float[] output = network.FeedForward(inputs);
 
-            if(output[0] > 0.0f)
+
+
+            if(output[0] > 0.05f)
             {
                 Debug.Log("AI DONE IT");
                 //Spacebar pressed
@@ -57,7 +92,8 @@ namespace AshenCode.FloopyBirb.Bird
 
         public Obstacle FindClosestObstacle()
         {
-            return null;
+            //TOOD: this is terrible, make not static TEMP!!
+            return Parallax.closest.GetComponent<Obstacle>();
         }
     }
 }

@@ -86,6 +86,8 @@ public class Parallax : MonoBehaviour
     float targetAspect;
     PoolObject[] poolObjects;
 
+    public static Transform closest;
+
 	/// <summary>
 	/// Awake is called when the script instance is being loaded.
 	/// </summary>
@@ -175,6 +177,10 @@ public class Parallax : MonoBehaviour
 		if(poolObj.transform.position.x < (-defaultSpawnPosition.x - poolObj.GetWidth() * Camera.main.aspect / targetAspect))
 		{
             poolObj.Dispose();
+        }
+        else
+        {
+            closest = poolObj.transform;
         }	
 	}
 	
