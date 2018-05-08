@@ -6,17 +6,16 @@ using AshenCode.FloopyBirb.World;
 
 namespace AshenCode.FloopyBirb.Bird
 {
-    public class BirdAI : Bird
+    public class BirdAIController : IControllable
     {
-
         NeuralNetwork.NeuralNetwork network;
 
-        void Update()
+        public void Control(Transform transform)
         {
-            Think(FindClosestObstacle());
+            this.Think(transform, FindClosestObstacle());
         }
 
-        public void Think( Obstacle obstacle )
+        public void Think(Transform transform, Obstacle obstacle )
         {
             ///  y location of bird
             ///  x location the closest pipe
@@ -25,7 +24,7 @@ namespace AshenCode.FloopyBirb.Bird
             // normalize data
             float[] inputs = new float[]
             {
-                this.transform.position.y,
+                transform.position.y,
                 obstacle.transform.position.y,
                 obstacle.transform.position.y,
                 obstacle.transform.position.y
