@@ -12,9 +12,14 @@ namespace AshenCode.FloopyBirb.Bird
         {
             //TODO: Listen for input
             //get duration of spacebar being held down
-            if(callback != null)
+
+            if (Input.GetKeyDown("space"))
             {
-                callback();
+                Debug.Log(this+ " jump");
+                if(callback != null)
+                {
+                    callback();
+                }
             }
         }
     }

@@ -33,7 +33,7 @@ namespace AshenCode.FloopyBirb.World
             {
                 GameObject bird = Instantiate(_birdPrefab);
                 Bird.Bird b = bird.GetComponent<Bird.Bird>();
-                b.Init(new BirdAIController());
+                b.Init(new BirdHumanController());
                 _birds.Add(b);
             }
         }
