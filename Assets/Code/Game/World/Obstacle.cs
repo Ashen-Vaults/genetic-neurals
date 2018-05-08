@@ -3,17 +3,19 @@ using System.Linq;
 using System.Collections; 
 using System.Collections.Generic; 
 using UnityEngine;
-using Effects;
 
-public class Obstacle:MonoBehaviour
+namespace AshenCode.FloopyBirb.World
 {
-    private List<IEffectable> _effects;
-
-    public void Activate(GameObject g)
+    public class Obstacle : MonoBehaviour
     {
-        if(_effects != null)
+        private List<IEffectable> _effects;
+
+        public void Activate(GameObject g)
         {
-            _effects.ForEach(e => e.Run(g));
+            if(_effects != null)
+            {
+                _effects.ForEach(e => e.Run(g));
+            }
         }
     }
 }
