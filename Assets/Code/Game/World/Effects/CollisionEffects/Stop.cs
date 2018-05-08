@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Effects
+namespace AshenCode.FloopyBirb.World
 {
 
     public class Stop : CollisionEffect
