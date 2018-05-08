@@ -15,6 +15,7 @@ namespace AshenCode.FloopyBirb.Bird
 
         UnityEngine.Random rand;
 
+
         public BirdAIController()
         {
 
@@ -32,7 +33,7 @@ namespace AshenCode.FloopyBirb.Bird
 
         public void Control(Transform transform, Action callback)
         {
-            this.Think(transform, FindClosestObstacle(), callback);
+            this.Think(transform, FindClosestObstacle(transform), callback);
         }
 
 
@@ -52,48 +53,74 @@ namespace AshenCode.FloopyBirb.Bird
             ///  y location of bottom pipe
             // normalize data
 
-
-
-
-            float[] inputs = new float[]
-            {
+            /*
                 UnityEngine.Random.Range(0f,1f),
                 UnityEngine.Random.Range(0f,1f),
                 UnityEngine.Random.Range(0f,1f),
                 UnityEngine.Random.Range(0f,1f)
-                //transform.position.y,
-                //obstacle.transform.position.x,
-                //obstacle.top.position.y,
-                //obstacle.bottom.position.y
-            };
+             */
 
-            for(int i =0; i< inputs.Length; i++)
+             
+
+            if(obstacle != null)
             {
-                Debug.Log(inputs[i]);
-            }
 
-         //   Debug.Log(transform.position.y + "\n" 
-         //    +  obstacle.transform.position.x + " " + obstacle.top.position.y + " "+ obstacle.bottom.position.y );
-
-            float[] output = network.FeedForward(inputs);
-
-
-
-            if(output[0] > 0.05f)
-            {
-                Debug.Log("AI DONE IT");
-                //Spacebar pressed
-                if(callback != null)
+                float[] inputs = new float[]
                 {
-                    callback();
+                    transform.position.y,
+                    obstacle.transform.position.x,
+                    obstacle.top.position.y,
+                    obstacle.bottom.position.y
+                };
+
+                for(int i =0; i< inputs.Length; i++)
+                {
+                    Debug.Log(inputs[i]);
+                }
+
+            //   Debug.Log(transform.position.y + "\n" 
+            //    +  obstacle.transform.position.x + " " + obstacle.top.position.y + " "+ obstacle.bottom.position.y );
+
+                float[] output = network.FeedForward(inputs);
+
+
+
+                if(output[0] > 0.5f)
+                {
+                    Debug.Log("AI DONE IT");
+                    //Spacebar pressed
+                    if(callback != null)
+                    {
+                        callback();
+                    }
                 }
             }
         }
 
-        public Obstacle FindClosestObstacle()
+        private Obstacle FindClosestObstacle(Transform transform)
         {
-            //TOOD: this is terrible, make not static TEMP!!
-            return Parallax.closest.GetComponent<Obstacle>();
+
+
+            Transform closest = null;
+            float closestDistance = Mathf.Infinity;
+            Obstacle closestObstacle = null;
+
+            for(int i = 0; i< Parallax.poolObjects.Length; i++)
+            {
+                float distance =  transform.position.x - Parallax.poolObjects[i].transform.position.x;
+                if(distance < closestDistance && distance > 0)
+                {
+                    closest = Parallax.poolObjects[i].transform;
+                    closestDistance = distance;
+                    if(closest.GetComponent<Obstacle>() != null)
+                    {
+                        closestObstacle = closest.GetComponent<Obstacle>();
+                    }
+                }
+            }
+
+            return closestObstacle;
+
         }
     }
 }

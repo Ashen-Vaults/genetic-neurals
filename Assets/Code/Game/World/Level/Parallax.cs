@@ -9,7 +9,7 @@ public class Parallax : MonoBehaviour
 	#region PoolObject
 
 	[Serializable]
-	class PoolObject
+	public class PoolObject
 	{
         public Transform transform;
         public bool active;
@@ -84,7 +84,7 @@ public class Parallax : MonoBehaviour
 
     float spawnTimer;
     float targetAspect;
-    PoolObject[] poolObjects;
+    public static PoolObject[] poolObjects;
 
     public static Transform closest;
 
@@ -149,6 +149,8 @@ public class Parallax : MonoBehaviour
         position.y = UnityEngine.Random.Range(ySpawnRange.min, ySpawnRange.max);
         t.position = position;
 
+        
+
 		if(callback != null)
 		{
             callback();
@@ -164,7 +166,8 @@ public class Parallax : MonoBehaviour
     }
 
 	void Scroll()
-	{
+	{         
+
         for (int i = 0; i < poolObjects.Length; i++)
         {
             poolObjects[i].transform.localPosition += -Vector3.right * scrollSpeed * Time.deltaTime;
@@ -178,12 +181,8 @@ public class Parallax : MonoBehaviour
 		{
             poolObj.Dispose();
         }
-        else
-        {
-            closest = poolObj.transform;
-        }	
 	}
-	
+
 	Transform GetPoolObject()
 	{
     	PoolObject poolObj = poolObjects.FirstOrDefault(p => !p.active);
@@ -195,6 +194,5 @@ public class Parallax : MonoBehaviour
         }
         return null;
     }
-
-
+    
 }
