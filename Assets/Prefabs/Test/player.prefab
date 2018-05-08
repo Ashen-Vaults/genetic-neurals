@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4263927508076000}
   - component: {fileID: 212904715176725700}
   - component: {fileID: 50510680415135422}
-  - component: {fileID: 114387015831704036}
   - component: {fileID: 61292847615617598}
+  - component: {fileID: 114387015831704036}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -99,6 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f2601517aa8443d1b682c0e6d72f9f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tiltSmooth: 5
+  _force: 250
 --- !u!212 &212904715176725700
 SpriteRenderer:
   m_ObjectHideFlags: 1
