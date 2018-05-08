@@ -668,7 +668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _seed: 0
-  _birdCount: 1
+  _birdCount: 100
   _birds: []
   _birdPrefab: {fileID: 1135414525947772, guid: d7e7988bd006d41d8827d220b32095d8,
     type: 2}

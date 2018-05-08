@@ -22,7 +22,7 @@ namespace AshenCode.FloopyBirb.Bird
             rand = new UnityEngine.Random();
             List<int> inputs = new List<int>()
             {
-                4, 4, 1
+                4, 4, 2
                //transform.position.y,
                // obstacle.transform.position.x,
                // obstacle.top.position.y,
@@ -82,9 +82,9 @@ namespace AshenCode.FloopyBirb.Bird
 
                 float[] output = network.FeedForward(inputs);
 
-                Debug.Log(output[0]);
+              //  Debug.Log(output[0]);
 
-                if(output[0] > 0.5f)
+                if(output[0] > output[1])
                 {
                     //Spacebar pressed
                     if(callback != null)
