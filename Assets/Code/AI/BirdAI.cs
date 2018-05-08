@@ -37,15 +37,16 @@ namespace AshenCode.FloopyBirb.Bird
             float[] inputs = new float[]
             {
                 transform.position.y,
-                obstacle.transform.position.y,
-                obstacle.transform.position.y,
-                obstacle.transform.position.y
+                obstacle.transform.position.x,
+                obstacle.top.position.y,
+                obstacle.bottom.position.y
             };
 
             float[] output = network.FeedForward(inputs);
 
-            if(output[0] > 0.5f)
+            if(output[0] > 0.0f)
             {
+                Debug.Log("AI DONE IT");
                 //Spacebar pressed
                 if(callback != null)
                 {

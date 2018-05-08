@@ -20,6 +20,11 @@ namespace AshenCode.FloopyBirb.World
         [SerializeField]
         private GameObject _birdPrefab;
 
+        private bool _aiControlled;
+
+        [SerializeField]
+        private Transform _startPos;
+
         void Awake()
         {
             Init();
@@ -31,7 +36,7 @@ namespace AshenCode.FloopyBirb.World
 
             for(int i = 0; i < _birdCount; i++)
             {
-                GameObject bird = Instantiate(_birdPrefab);
+                GameObject bird = Instantiate(_birdPrefab, _startPos);
                 Bird.Bird b = bird.GetComponent<Bird.Bird>();
                 b.Init(new BirdHumanController());
                 _birds.Add(b);
