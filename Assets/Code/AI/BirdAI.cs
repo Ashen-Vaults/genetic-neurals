@@ -65,29 +65,27 @@ namespace AshenCode.FloopyBirb.Bird
             if(obstacle != null)
             {
 
+                //obstacle.GetComponentInChildren<SpriteRenderer>().color = Color.blue;
+
                 float[] inputs = new float[]
                 {
                     transform.position.y,
-                    obstacle.transform.position.x,
                     obstacle.top.position.y,
-                    obstacle.bottom.position.y
+                    obstacle.bottom.position.y,
+                    obstacle.transform.position.x
                 };
 
-                for(int i =0; i< inputs.Length; i++)
-                {
-                    Debug.Log(inputs[i]);
-                }
+   
 
             //   Debug.Log(transform.position.y + "\n" 
             //    +  obstacle.transform.position.x + " " + obstacle.top.position.y + " "+ obstacle.bottom.position.y );
 
                 float[] output = network.FeedForward(inputs);
 
-
+                Debug.Log(output[0]);
 
                 if(output[0] > 0.5f)
                 {
-                    Debug.Log("AI DONE IT");
                     //Spacebar pressed
                     if(callback != null)
                     {
@@ -107,7 +105,7 @@ namespace AshenCode.FloopyBirb.Bird
 
             for(int i = 0; i< Parallax.poolObjects.Length; i++)
             {
-                float distance =  transform.position.x - Parallax.poolObjects[i].transform.position.x;
+                float distance = Parallax.poolObjects[i].transform.position.x - transform.position.x;
                 if(distance < closestDistance && distance > 0)
                 {
                     closest = Parallax.poolObjects[i].transform;
