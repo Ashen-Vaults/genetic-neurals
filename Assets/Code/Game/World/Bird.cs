@@ -1,8 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AshenCode.FloopyBirb.Bird
+namespace AshenCode.FloopyBirb.Agents
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class Bird : MonoBehaviour
@@ -14,11 +15,17 @@ namespace AshenCode.FloopyBirb.Bird
 
         public Action onControl;
 
+        public Action<Bird> onDeath;
+
         [SerializeField]
         private float _tiltSmooth = 5f;
 
         [SerializeField]
         private float _force;
+
+        private float _score;
+
+        Coroutine _scoreRoutine;
 
         void Awake()
         {
@@ -26,9 +33,14 @@ namespace AshenCode.FloopyBirb.Bird
             Subscribe();
         }
 
-        public void Init(IControllable controller)
+        public void Init(IControllable controller, Action<Bird> callback)
         {
             this.controller = controller;
+
+            onDeath += callback;
+
+            _scoreRoutine = StartCoroutine(UpdateScore());
+            
         }
 
         void Subscribe()
@@ -39,6 +51,7 @@ namespace AshenCode.FloopyBirb.Bird
         void Unsubscribe()
         {
             onControl -= Jump;
+            onDeath = null;
         }
 
         void Update()
@@ -53,9 +66,20 @@ namespace AshenCode.FloopyBirb.Bird
 
         public void Death()
         {
-            Unsubscribe();
+
+            if(onDeath != null)
+                onDeath(this);
+
             this.gameObject.SetActive(false);
-            Destroy(this); 
+
+            if(_scoreRoutine != null)
+            {
+                StopCoroutine(_scoreRoutine);
+            }
+
+            Unsubscribe();
+
+            Destroy(this.gameObject); 
         }
 
 
@@ -64,10 +88,15 @@ namespace AshenCode.FloopyBirb.Bird
             Death();
         }
 
+        IEnumerator UpdateScore()
+        {
+            _score += 100;
+            yield return new WaitForSeconds(0.1f);
+        }
+
 
         public void Jump()
         {
-            print(this+ " jump");
             _rigidBody.AddForce(Vector2.up * _force, ForceMode2D.Force);
         }
 

@@ -5,7 +5,7 @@ using AshenCode.NeuralNetwork;
 using AshenCode.FloopyBirb.World;
 using System;
 
-namespace AshenCode.FloopyBirb.Bird
+namespace AshenCode.FloopyBirb.Agents
 {
     public class BirdAIController : IControllable
     {
@@ -47,26 +47,8 @@ namespace AshenCode.FloopyBirb.Bird
 
         public void Think(Transform transform, Obstacle obstacle, Action callback)
         {
-            ///  y location of bird
-            ///  x location the closest pipe
-            ///  y location of the top pipe
-            ///  y location of bottom pipe
-            // normalize data
-
-            /*
-                UnityEngine.Random.Range(0f,1f),
-                UnityEngine.Random.Range(0f,1f),
-                UnityEngine.Random.Range(0f,1f),
-                UnityEngine.Random.Range(0f,1f)
-             */
-
-             
-
             if(obstacle != null)
             {
-
-                //obstacle.GetComponentInChildren<SpriteRenderer>().color = Color.blue;
-
                 float[] inputs = new float[]
                 {
                     transform.position.y,
@@ -75,14 +57,7 @@ namespace AshenCode.FloopyBirb.Bird
                     obstacle.transform.position.x
                 };
 
-   
-
-            //   Debug.Log(transform.position.y + "\n" 
-            //    +  obstacle.transform.position.x + " " + obstacle.top.position.y + " "+ obstacle.bottom.position.y );
-
                 float[] output = network.FeedForward(inputs);
-
-              //  Debug.Log(output[0]);
 
                 if(output[0] > output[1])
                 {
@@ -97,8 +72,6 @@ namespace AshenCode.FloopyBirb.Bird
 
         private Obstacle FindClosestObstacle(Transform transform)
         {
-
-
             Transform closest = null;
             float closestDistance = Mathf.Infinity;
             Obstacle closestObstacle = null;

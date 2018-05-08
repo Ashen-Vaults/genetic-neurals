@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AshenCode.FloopyBirb.Bird
+namespace AshenCode.FloopyBirb.Agents
 {
     public class BirdHumanController : IControllable
     {
