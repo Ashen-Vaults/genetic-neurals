@@ -21,6 +21,11 @@ namespace AshenCode.FloopyBirb.Bird
             Death();
         }
 
+        public void Init(IControllable controller)
+        {
+            this.controller = controller;
+        }
+
         void Subscribe()
         {
             onControl += Jump;
