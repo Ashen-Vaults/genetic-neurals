@@ -83,7 +83,7 @@ namespace AshenCode.FloopyBirb.World
         {
             _birds.Remove(b);
             _savedBirds.Add(b);
-            EvolveAgents();
+           // EvolveAgents();
             if(NewGeneration(_birds)) NextGeneration();
         }
 
@@ -100,7 +100,8 @@ namespace AshenCode.FloopyBirb.World
         {
 
             UpdateFitness(_savedBirds);
-            InitSimulation( EvolveAgents());
+            InitSimulation();
+            //InitSimulation( EvolveAgents()); //TODO: fix Breaks next generations
             _savedBirds.Clear();
 
         }
