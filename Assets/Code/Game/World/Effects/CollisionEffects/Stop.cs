@@ -12,7 +12,7 @@ namespace AshenCode.FloopyBirb.World
         {
             g.GetComponent<Renderer>().material.color = Color.red;
             //TEMP
-            g.GetComponent<Agents.Bird>().Death();
+            g.GetComponent<Agents.BirdView>().Death();
         }
 
     }

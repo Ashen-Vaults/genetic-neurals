@@ -29,7 +29,7 @@ namespace AshenCode.FloopyBirb.World
         private Action gameOver;
 
         [SerializeField]
-        private List<NeuralNetwork.NeuralNetwork> _birdDNA = new List<NeuralNetwork.NeuralNetwork>();
+        private List<Bird> _savedBirds = new List<Bird>();
 
         [SerializeField]
         private float _mutateRate = 1000f;
@@ -47,6 +47,7 @@ namespace AshenCode.FloopyBirb.World
 
         void InitSimulation(List<NeuralNetwork.NeuralNetwork> nets = null)
         {
+            _birds = new List<Bird>();
             _generation += 1;
             UnityEngine.Random.InitState(_seed);
             _parallax.Init();
@@ -55,18 +56,19 @@ namespace AshenCode.FloopyBirb.World
             {
                 GameObject bird = Instantiate(_birdPrefab);
                 bird.transform.position =_startPos.position;
-                Agents.Bird b = bird.GetComponent<Agents.Bird>();
+                Agents.BirdView view = bird.GetComponent<Agents.BirdView>();
+                Agents.Bird b = view.bird;
 
                 if(nets != null)
                 {
-                    b.Init(new BirdAIController(nets[i]), c => 
+                    b.Init(view, new BirdAIController(nets[i]), c => 
                     {
                         OnBirdDeath(b);
                     } );
                 }
                 else
                 {
-                    b.Init(new BirdAIController(), c => 
+                    b.Init(view, new BirdAIController(), c => 
                     {
                         OnBirdDeath(b);
                     } );
@@ -79,15 +81,9 @@ namespace AshenCode.FloopyBirb.World
         void OnBirdDeath(Bird b)
         {
             _birds.Remove(b);
-            _birdDNA.Add(b.controller.GetNetwork());
+            _savedBirds.Add(b);
             EvolveAgents();
             if(NewGeneration(_birds)) NextGeneration();
-        }
-
-        void SaveBirdDNA(IControllable controller)
-        {
-            NeuralNetwork.NeuralNetwork n = new NeuralNetwork.NeuralNetwork(controller.GetNetwork());
-            _birdDNA.Add(n);
         }
 
         bool NewGeneration(List<Agents.Bird> birds)
@@ -102,9 +98,9 @@ namespace AshenCode.FloopyBirb.World
         void NextGeneration()
         {
 
-            UpdateFitness(_birds);
+            UpdateFitness(_savedBirds);
             InitSimulation( EvolveAgents());
-            _birdDNA.Clear();
+            _savedBirds.Clear();
 
         }
 
@@ -117,16 +113,16 @@ namespace AshenCode.FloopyBirb.World
 
         List<NeuralNetwork.NeuralNetwork> EvolveAgents()
         {
-            List<NeuralNetwork.NeuralNetwork> nets = _birdDNA;//.Select( b => b.controller.GetNetwork()).ToList();
+            List<NeuralNetwork.NeuralNetwork> nets = _savedBirds.Select( b => b.controller.GetNetwork()).ToList();
 
             nets.Sort();
 
-            for(int i =0; i < _birdDNA.Count / 2; i++)
+            for(int i =0; i < _savedBirds.Count / 2; i++)
             {
 
-                nets[i] = new NeuralNetwork.NeuralNetwork(nets[i+(_birdDNA.Count / 2)]);
+                nets[i] = new NeuralNetwork.NeuralNetwork(nets[i+(_savedBirds.Count / 2)]);
                 nets[i].Mutate();
-                nets[i + (_birdDNA.Count / 2)] = new NeuralNetwork.NeuralNetwork(nets[i + (_birdDNA.Count / 2)]);
+                nets[i + (_savedBirds.Count / 2)] = new NeuralNetwork.NeuralNetwork(nets[i + (_savedBirds.Count / 2)]);
 
               //  _birdDNA[i] = new NeuralNetwork.NeuralNetwork(_birds[i+(_birdCount / 2)].controller.GetNetwork());
               //  _birdDNA[i].Mutate();
