@@ -10,6 +10,9 @@ namespace AshenCode.FloopyBirb.World
     {
         private List<IEffectable> _effects;
 
+        public Transform top;
+        public Transform bottom;
+
         public void Activate(GameObject g)
         {
             if(_effects != null)

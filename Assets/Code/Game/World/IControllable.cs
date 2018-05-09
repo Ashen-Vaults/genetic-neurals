@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace AshenCode.FloopyBirb.Bird
+namespace AshenCode.FloopyBirb.Agents
 {
     public interface IControllable
     {
-         void Control(Transform transform);
+         void Control(Transform transform, Action action);
+
+         NeuralNetwork.NeuralNetwork GetNetwork();
+
+         void UpdateFitness(float fitness);
     }
 }

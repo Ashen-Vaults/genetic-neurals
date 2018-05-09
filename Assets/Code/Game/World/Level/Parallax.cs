@@ -9,7 +9,7 @@ public class Parallax : MonoBehaviour
 	#region PoolObject
 
 	[Serializable]
-	class PoolObject
+	public class PoolObject
 	{
         public Transform transform;
         public bool active;
@@ -84,28 +84,18 @@ public class Parallax : MonoBehaviour
 
     float spawnTimer;
     float targetAspect;
-    PoolObject[] poolObjects;
+    public static PoolObject[] poolObjects;
 
-	/// <summary>
-	/// Awake is called when the script instance is being loaded.
-	/// </summary>
-	void Awake()
+    public static Transform closest;
+
+    Coroutine _loopRoutine;
+
+
+	public void Init()
 	{
-        Init();
-    }
 
+        Cleanup();
 
-	/// <summary>
-	/// Start is called on the frame when a script is enabled just before
-	/// any of the Update methods is called the first time.
-	/// </summary>
-	void Start()
-	{
-		
-	}
-
-	void Init()
-	{
         targetAspect = targetAspectRatio.x / targetAspectRatio.y;
         poolObjects = new PoolObject[poolSize];
         for (int i = 0; i < poolObjects.Length; i++)
@@ -121,20 +111,37 @@ public class Parallax : MonoBehaviour
 		{
             SpawnImmediate();
         }
+
+
+        _loopRoutine = StartCoroutine(Loop());
+
     }
 
-	void OnApplicationQuit()
+
+    void Cleanup()
+    {
+        if(poolObjects != null)
+        {
+            poolObjects.ToList().ForEach(p => p.Dispose());
+        }
+        if(_loopRoutine != null)
+        {
+            StopCoroutine(_loopRoutine);
+        }
+    }
+
+	IEnumerator Loop()
 	{
-		
-	}
-	void Update()
-	{
-        Scroll();
-        spawnTimer += Time.deltaTime;
-		if(spawnTimer > spawnRate)
-		{
-            Spawn(defaultSpawnPosition, null);
-            spawnTimer = 0;
+        while(true)
+        {
+            Scroll();
+            spawnTimer += Time.deltaTime;
+            if(spawnTimer > spawnRate)
+            {
+                Spawn(defaultSpawnPosition, null);
+                spawnTimer = 0;
+            }
+            yield return new WaitForSeconds(0);
         }
     }
 
@@ -146,6 +153,8 @@ public class Parallax : MonoBehaviour
         position.x = spawnPosition.x * Camera.main.aspect / targetAspect ;
         position.y = UnityEngine.Random.Range(ySpawnRange.min, ySpawnRange.max);
         t.position = position;
+
+        
 
 		if(callback != null)
 		{
@@ -162,7 +171,8 @@ public class Parallax : MonoBehaviour
     }
 
 	void Scroll()
-	{
+	{         
+
         for (int i = 0; i < poolObjects.Length; i++)
         {
             poolObjects[i].transform.localPosition += -Vector3.right * scrollSpeed * Time.deltaTime;
@@ -175,9 +185,9 @@ public class Parallax : MonoBehaviour
 		if(poolObj.transform.position.x < (-defaultSpawnPosition.x - poolObj.GetWidth() * Camera.main.aspect / targetAspect))
 		{
             poolObj.Dispose();
-        }	
+        }
 	}
-	
+
 	Transform GetPoolObject()
 	{
     	PoolObject poolObj = poolObjects.FirstOrDefault(p => !p.active);
@@ -189,6 +199,5 @@ public class Parallax : MonoBehaviour
         }
         return null;
     }
-
-
+    
 }

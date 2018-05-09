@@ -3,45 +3,112 @@ using System.Collections.Generic;
 
 using AshenCode.NeuralNetwork;
 using AshenCode.FloopyBirb.World;
+using System;
 
-namespace AshenCode.FloopyBirb.Bird
+namespace AshenCode.FloopyBirb.Agents
 {
     public class BirdAIController : IControllable
     {
+        [SerializeField]
         NeuralNetwork.NeuralNetwork network;
 
-        public void Control(Transform transform)
+        List<Action> _actions;
+
+        UnityEngine.Random rand;
+
+
+        public BirdAIController(NeuralNetwork.NeuralNetwork net = null)
         {
-            this.Think(transform, FindClosestObstacle());
+
+            if(net == null)
+            {
+                rand = new UnityEngine.Random();
+                List<int> inputs = new List<int>()
+                {
+                    4, 4, 2
+                };
+                this.network = new NeuralNetwork.NeuralNetwork(inputs); 
+            }
+            else
+            {
+                this.network = net;
+            }
+
         }
 
-        public void Think(Transform transform, Obstacle obstacle )
+        public void Control(Transform transform, Action callback)
         {
-            ///  y location of bird
-            ///  x location the closest pipe
-            ///  y location of the top pipe
-            ///  y location of bottom pipe
-            // normalize data
-            float[] inputs = new float[]
-            {
-                transform.position.y,
-                obstacle.transform.position.y,
-                obstacle.transform.position.y,
-                obstacle.transform.position.y
-            };
+            this.Think(transform, FindClosestObstacle(transform), callback);
+        }
 
-            float[] output = network.FeedForward(inputs);
+        public NeuralNetwork.NeuralNetwork GetNetwork()
+        {
+            return this.network;
+        }
 
-            if(output[0] > 0.5f)
+        public void Subscribe(List<Action> actions)
+        {
+            if(actions != null)
             {
-                //jump
+                _actions = actions;
             }
         }
 
-        public Obstacle FindClosestObstacle()
+        public void Think(Transform transform, Obstacle obstacle, Action callback)
         {
-            return null;
-        } 
+            if(obstacle != null)
+            {
+                float[] inputs = new float[]
+                {
+                    transform.position.y,
+                    obstacle.top.position.y,
+                    obstacle.bottom.position.y,
+                    obstacle.transform.position.x
+                };
 
+                float[] output = network.FeedForward(inputs);
+
+                if(output[0] > output[1])
+                {
+                    //Spacebar pressed
+                    if(callback != null)
+                    {
+                        callback();
+                    }
+                }
+            }
+        }
+
+        public void UpdateFitness(float fitness)
+        {
+            if(this.network != null && this.network.fitness != null)
+            {
+                this.network.fitness.Modify(fitness);
+            }
+        }
+
+        private Obstacle FindClosestObstacle(Transform transform)
+        {
+            Transform closest = null;
+            float closestDistance = Mathf.Infinity;
+            Obstacle closestObstacle = null;
+
+            for(int i = 0; i< Parallax.poolObjects.Length; i++)
+            {
+                float distance = Parallax.poolObjects[i].transform.position.x - transform.position.x;
+                if(distance < closestDistance && distance > 0)
+                {
+                    closest = Parallax.poolObjects[i].transform;
+                    closestDistance = distance;
+                    if(closest.GetComponent<Obstacle>() != null)
+                    {
+                        closestObstacle = closest.GetComponent<Obstacle>();
+                    }
+                }
+            }
+
+            return closestObstacle;
+
+        }
     }
 }
