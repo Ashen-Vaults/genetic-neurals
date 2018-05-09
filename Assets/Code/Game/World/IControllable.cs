@@ -8,5 +8,8 @@ namespace AshenCode.FloopyBirb.Agents
     {
          void Control(Transform transform, Action action);
 
+         NeuralNetwork.NeuralNetwork GetNetwork();
+
+         void UpdateFitness(float fitness);
     }
 }

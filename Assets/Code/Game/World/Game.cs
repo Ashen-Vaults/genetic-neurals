@@ -28,7 +28,7 @@ namespace AshenCode.FloopyBirb.World
         private Action gameOver;
 
         [SerializeField]
-        private List<Agents.Bird> _birdDNA;
+        private List<NeuralNetwork.NeuralNetwork> _birdDNA = new List<NeuralNetwork.NeuralNetwork>();
 
         void Awake()
         {
@@ -48,10 +48,10 @@ namespace AshenCode.FloopyBirb.World
             }
         }
 
-        void SaveBirdDNA(Agents.Bird bird)
+        void SaveBirdDNA(IControllable controller)
         {
-            Agents.Bird b = new Bird();
-            _birdDNA.Add(b);
+            NeuralNetwork.NeuralNetwork n = new NeuralNetwork.NeuralNetwork(controller.GetNetwork());
+            _birdDNA.Add(n);
         }
     }
 }

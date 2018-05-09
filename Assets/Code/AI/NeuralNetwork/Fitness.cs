@@ -1,9 +1,12 @@
 using System;
+using UnityEngine;
 
 namespace AshenCode.NeuralNetwork
 {
+    [Serializable]
     public class Fitness : IComparable<Fitness>
     {
+        [SerializeField]
         private float _value;
         public float Value
         {

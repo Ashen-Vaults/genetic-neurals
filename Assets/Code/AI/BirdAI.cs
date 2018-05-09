@@ -36,6 +36,10 @@ namespace AshenCode.FloopyBirb.Agents
             this.Think(transform, FindClosestObstacle(transform), callback);
         }
 
+        public NeuralNetwork.NeuralNetwork GetNetwork()
+        {
+            return this.network;
+        }
 
         public void Subscribe(List<Action> actions)
         {
@@ -68,6 +72,11 @@ namespace AshenCode.FloopyBirb.Agents
                     }
                 }
             }
+        }
+
+        public void UpdateFitness(float fitness)
+        {
+            this.network.fitness.Modify(fitness);
         }
 
         private Obstacle FindClosestObstacle(Transform transform)

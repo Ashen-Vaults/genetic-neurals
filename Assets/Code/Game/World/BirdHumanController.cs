@@ -1,4 +1,5 @@
 using System;
+using AshenCode.NeuralNetwork;
 using UnityEngine;
 
 namespace AshenCode.FloopyBirb.Agents
@@ -21,6 +22,16 @@ namespace AshenCode.FloopyBirb.Agents
                     callback();
                 }
             }
+        }
+
+        public NeuralNetwork.NeuralNetwork GetNetwork()
+        {
+            return null;
+        }
+
+        public void UpdateFitness(float fitness)
+        {
+            throw new NotImplementedException();
         }
     }
 }

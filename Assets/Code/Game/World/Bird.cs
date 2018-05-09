@@ -15,7 +15,7 @@ namespace AshenCode.FloopyBirb.Agents
 
         public Action onControl;
 
-        public Action<Bird> onDeath;
+        public Action onDeath;
 
         [SerializeField]
         private float _tiltSmooth = 5f;
@@ -33,14 +33,13 @@ namespace AshenCode.FloopyBirb.Agents
             Subscribe();
         }
 
-        public void Init(IControllable controller, Action<Bird> callback)
+        public void Init(IControllable controller, Action<IControllable> callback)
         {
             this.controller = controller;
 
-            onDeath += callback;
+            onDeath += () => { callback(this.controller);};
 
-            _scoreRoutine = StartCoroutine(UpdateScore());
-            
+            _scoreRoutine = StartCoroutine(UpdateScore());           
         }
 
         void Subscribe()
@@ -68,7 +67,7 @@ namespace AshenCode.FloopyBirb.Agents
         {
 
             if(onDeath != null)
-                onDeath(this);
+                onDeath();
 
             this.gameObject.SetActive(false);
 
@@ -79,7 +78,7 @@ namespace AshenCode.FloopyBirb.Agents
 
             Unsubscribe();
 
-            Destroy(this.gameObject); 
+         //   Destroy(this.gameObject); 
         }
 
 
@@ -91,6 +90,7 @@ namespace AshenCode.FloopyBirb.Agents
         IEnumerator UpdateScore()
         {
             _score += 100;
+            this.controller.UpdateFitness(1);
             yield return new WaitForSeconds(0.1f);
         }
 

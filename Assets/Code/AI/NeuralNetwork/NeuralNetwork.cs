@@ -1,18 +1,23 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AshenCode.NeuralNetwork
 {
 
+    [Serializable]
     public class NeuralNetwork : IComparable<NeuralNetwork>, INeurable
     {
         //Feed in layers
+        [SerializeField]
         List<int> _layers;
+        [SerializeField]
         float[][] _neurons;
         float[][][] _weights;
-        Random _random;
+        System.Random _random;
         public Fitness fitness;
+        [SerializeField]
         private List<Mutation> _mutations;
 
         /// <summary>
@@ -32,7 +37,7 @@ namespace AshenCode.NeuralNetwork
         {
             fitness = new Fitness();
             _mutations = new List<Mutation>();
-            _random = new Random(System.DateTime.Today.Millisecond);
+            _random = new System.Random(System.DateTime.Today.Millisecond);
             _layers = layers;
             _neurons = CreateNeurons(_layers);
             _weights = CreateWeights(_layers);   
