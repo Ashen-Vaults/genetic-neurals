@@ -16,9 +16,6 @@ namespace AshenCode.FloopyBirb.World
         private int _birdCount;
 
         [SerializeField]
-        private List<Agents.Bird> _birds;
-
-        [SerializeField]
         private GameObject _birdPrefab;
 
         private bool _aiControlled;
@@ -28,8 +25,6 @@ namespace AshenCode.FloopyBirb.World
 
         private Action gameOver;
 
-        [SerializeField]
-        private List<Bird> _savedBirds = new List<Bird>();
 
         [SerializeField]
         private float _mutateRate = 1000f;
@@ -40,6 +35,12 @@ namespace AshenCode.FloopyBirb.World
         [SerializeField]
         private Parallax _parallax;
 
+        [SerializeField]
+        private List<Bird> _birds;
+
+       [SerializeField]
+        private List<Bird> _savedBirds = new List<Bird>();
+
         void Awake()
         {
             InitSimulation();
@@ -47,7 +48,7 @@ namespace AshenCode.FloopyBirb.World
 
         void InitSimulation(List<NeuralNetwork.NeuralNetwork> nets = null)
         {
-            _birds = new List<Bird>();
+            _birds.Clear();
             _generation += 1;
             UnityEngine.Random.InitState(_seed);
             _parallax.Init();

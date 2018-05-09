@@ -9,6 +9,7 @@ namespace AshenCode.FloopyBirb.Agents
 {
     public class BirdAIController : IControllable
     {
+        [SerializeField]
         NeuralNetwork.NeuralNetwork network;
 
         List<Action> _actions;
@@ -80,7 +81,10 @@ namespace AshenCode.FloopyBirb.Agents
 
         public void UpdateFitness(float fitness)
         {
-            this.network.fitness.Modify(fitness);
+            if(this.network != null && this.network.fitness != null)
+            {
+                this.network.fitness.Modify(fitness);
+            }
         }
 
         private Obstacle FindClosestObstacle(Transform transform)

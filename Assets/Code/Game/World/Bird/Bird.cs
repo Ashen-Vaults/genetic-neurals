@@ -15,8 +15,6 @@ namespace AshenCode.FloopyBirb.Agents
 
         public Action onControl;
 
-        public Action onDeath;
-
         [SerializeField]
         private float _tiltSmooth = 5f;
 
@@ -30,19 +28,10 @@ namespace AshenCode.FloopyBirb.Agents
         {
             Subscribe();
             this.view = view;
-            this.view.Init(UpdateScore(), Update());
+            this.view.Init(UpdateScore(), Update(),  () => { callback(this.controller); Unsubscribe(); });
             this.controller = controller;
-            onDeath += () => { callback(this.controller);};       
+                   
         }
-
-        public void Death()
-        {
-            if(onDeath != null)
-            {
-                onDeath();
-            }
-            Unsubscribe();
-        }    
 
         void Subscribe()
         {
@@ -52,7 +41,6 @@ namespace AshenCode.FloopyBirb.Agents
         void Unsubscribe()
         {
             onControl = null;
-            onDeath = null;
         }
 
         IEnumerator Update()

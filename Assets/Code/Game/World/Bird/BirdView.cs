@@ -13,6 +13,7 @@ namespace AshenCode.FloopyBirb.Agents
 
         Coroutine _scoreRoutine;
         Coroutine _loopRoutine;
+        Action _onDeath;
 
         public Bird bird;
 
@@ -22,10 +23,11 @@ namespace AshenCode.FloopyBirb.Agents
             bird = new Bird();
         }
 
-        public void Init(IEnumerator Score, IEnumerator loop)
+        public void Init(IEnumerator Score, IEnumerator loop, Action death)
         {
             _scoreRoutine = StartCoroutine(Score);   
             _loopRoutine = StartCoroutine(loop);    
+            _onDeath = death;
         }
 
         void OnCollisionEnter2D(Collision2D other)
@@ -46,6 +48,11 @@ namespace AshenCode.FloopyBirb.Agents
             if(_loopRoutine != null)
             {
                 StopCoroutine(_loopRoutine);
+            }
+
+            if(_onDeath != null)
+            {
+                _onDeath();
             }
 
             Destroy(this.gameObject);     
