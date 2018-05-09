@@ -1,3 +1,6 @@
+using UnityEngine;
+using System; 
+
 namespace AshenCode.World.Level
 {
     #region PoolObject

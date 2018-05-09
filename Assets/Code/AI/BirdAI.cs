@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using AshenCode.NeuralNetwork;
 using AshenCode.FloopyBirb.World;
+using AshenCode.World.Level;
 using System;
 
 namespace AshenCode.FloopyBirb.Agents
