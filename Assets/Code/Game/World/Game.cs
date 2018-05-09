@@ -53,7 +53,8 @@ namespace AshenCode.FloopyBirb.World
 
             for(int i = 0; i < _birdCount; i++)
             {
-                GameObject bird = Instantiate(_birdPrefab, _startPos);
+                GameObject bird = Instantiate(_birdPrefab);
+                bird.transform.position =_startPos.position;
                 Agents.Bird b = bird.GetComponent<Agents.Bird>();
 
                 if(nets != null)
