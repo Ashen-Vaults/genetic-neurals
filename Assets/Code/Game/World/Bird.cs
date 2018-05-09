@@ -11,7 +11,7 @@ namespace AshenCode.FloopyBirb.Agents
         
         private  Rigidbody2D _rigidBody;
 
-        private IControllable controller;
+        public IControllable controller;
 
         public Action onControl;
 
@@ -23,7 +23,7 @@ namespace AshenCode.FloopyBirb.Agents
         [SerializeField]
         private float _force;
 
-        private float _score;
+        public float score;
 
         Coroutine _scoreRoutine;
 
@@ -78,7 +78,7 @@ namespace AshenCode.FloopyBirb.Agents
 
             Unsubscribe();
 
-         //   Destroy(this.gameObject); 
+//            Destroy(this.gameObject); 
         }
 
 
@@ -89,8 +89,7 @@ namespace AshenCode.FloopyBirb.Agents
 
         IEnumerator UpdateScore()
         {
-            _score += 100;
-            this.controller.UpdateFitness(1);
+            score += 100;
             yield return new WaitForSeconds(0.1f);
         }
 

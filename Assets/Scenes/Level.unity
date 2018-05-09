@@ -668,11 +668,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _seed: 0
-  _birdCount: 100
+  _birdCount: 25
   _birds: []
   _birdPrefab: {fileID: 1135414525947772, guid: d7e7988bd006d41d8827d220b32095d8,
     type: 2}
   _startPos: {fileID: 200749645}
+  _birdDNA: []
+  _mutateRate: 1000
+  _generation: 0
+  _parallax: {fileID: 835603254}
 --- !u!4 &1619686206
 Transform:
   m_ObjectHideFlags: 0

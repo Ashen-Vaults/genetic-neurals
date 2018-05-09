@@ -150,6 +150,7 @@ namespace AshenCode.NeuralNetwork
         /// </summary>
         public void Mutate()
         {
+            if(_random == null) _random = new System.Random();
             for (int i = 0; i < _weights.Length; i++)
             {
                 for (int j = 0; j < _weights[i].Length; j++)
@@ -180,5 +181,6 @@ namespace AshenCode.NeuralNetwork
             else if (other == null) return 1;
             else return fitness.CompareTo(other.fitness);
         }
+        
     }
 } 

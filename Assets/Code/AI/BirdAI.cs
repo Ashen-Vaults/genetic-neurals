@@ -16,19 +16,23 @@ namespace AshenCode.FloopyBirb.Agents
         UnityEngine.Random rand;
 
 
-        public BirdAIController()
+        public BirdAIController(NeuralNetwork.NeuralNetwork net = null)
         {
 
-            rand = new UnityEngine.Random();
-            List<int> inputs = new List<int>()
+            if(net == null)
             {
-                4, 4, 2
-               //transform.position.y,
-               // obstacle.transform.position.x,
-               // obstacle.top.position.y,
-               // obstacle.bottom.position.y
-            };
-            this.network = new NeuralNetwork.NeuralNetwork(inputs); 
+                rand = new UnityEngine.Random();
+                List<int> inputs = new List<int>()
+                {
+                    4, 4, 2
+                };
+                this.network = new NeuralNetwork.NeuralNetwork(inputs); 
+            }
+            else
+            {
+                this.network = net;
+            }
+
         }
 
         public void Control(Transform transform, Action callback)

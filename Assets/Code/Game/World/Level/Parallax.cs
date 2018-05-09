@@ -88,26 +88,14 @@ public class Parallax : MonoBehaviour
 
     public static Transform closest;
 
-	/// <summary>
-	/// Awake is called when the script instance is being loaded.
-	/// </summary>
-	void Awake()
-	{
-        Init();
-    }
+    Coroutine _loopRoutine;
 
 
-	/// <summary>
-	/// Start is called on the frame when a script is enabled just before
-	/// any of the Update methods is called the first time.
-	/// </summary>
-	void Start()
+	public void Init()
 	{
-		
-	}
 
-	void Init()
-	{
+        Cleanup();
+
         targetAspect = targetAspectRatio.x / targetAspectRatio.y;
         poolObjects = new PoolObject[poolSize];
         for (int i = 0; i < poolObjects.Length; i++)
@@ -123,20 +111,37 @@ public class Parallax : MonoBehaviour
 		{
             SpawnImmediate();
         }
+
+
+        _loopRoutine = StartCoroutine(Loop());
+
     }
 
-	void OnApplicationQuit()
+
+    void Cleanup()
+    {
+        if(poolObjects != null)
+        {
+            poolObjects.ToList().ForEach(p => p.Dispose());
+        }
+        if(_loopRoutine != null)
+        {
+            StopCoroutine(_loopRoutine);
+        }
+    }
+
+	IEnumerator Loop()
 	{
-		
-	}
-	void Update()
-	{
-        Scroll();
-        spawnTimer += Time.deltaTime;
-		if(spawnTimer > spawnRate)
-		{
-            Spawn(defaultSpawnPosition, null);
-            spawnTimer = 0;
+        while(true)
+        {
+            Scroll();
+            spawnTimer += Time.deltaTime;
+            if(spawnTimer > spawnRate)
+            {
+                Spawn(defaultSpawnPosition, null);
+                spawnTimer = 0;
+            }
+            yield return new WaitForSeconds(0);
         }
     }
 
